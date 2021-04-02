@@ -23,7 +23,7 @@ class App extends Component {
   componentDidMount() {
     axios.get('https://practiceapi.devmountain.com/api/posts')
     .then(results => {
-      // console.log(results)
+      console.log(results.data)
       this.setState({ posts: results.data })
       // .catch(error => console.log(error))
     });
@@ -31,9 +31,9 @@ class App extends Component {
 
   updatePost(id, text) {
     axios.put(`https://practiceapi.devmountain.com/api/posts?id=${id}`, { text })
-    .then(results => (
-      this.setState({ posts: results.data })
-    ))
+    .then(results => {
+      this.setState({ posts: results.data });
+    });
   }
 
   deletePost(id) {
@@ -47,6 +47,7 @@ class App extends Component {
   createPost(text) {
     axios.post(`https://practiceapi.devmountain.com/api/posts`, {text})
     .then(results => {
+      // console.log('create post hit', results)
       this.setState ({ posts: results.data })
     })
 
@@ -64,11 +65,11 @@ class App extends Component {
           <Compose createPostFn={ this.createPost }/>
           {
             posts.map(post => (
-              <Post text={ post.text } 
+              <Post key={ post.id }
+              text={ post.text } 
               date={ post.date }
-              key={ post.id }
+              id={ post.id }
               updatePostFn={ this.updatePost }
-              id={ post.id } 
               deletePostFn={ this.deletePost }
               />
             ))
